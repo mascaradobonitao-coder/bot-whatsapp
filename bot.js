@@ -1,13 +1,4 @@
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason } = require("@whiskeysockets/baileys")
-const fs = require("fs")
-
-let comandos = []
-
-// carregar comandos
-fs.readdirSync("./comandos").forEach(file => {
-    const cmd = require(`./comandos/${file}`)
-    comandos.push(cmd)
-})
 
 async function startBot() {
     const { state, saveCreds } = await useMultiFileAuthState("auth")
@@ -30,8 +21,6 @@ async function startBot() {
             if (shouldReconnect) {
                 console.log("🔄 Reconectando...")
                 startBot()
-            } else {
-                console.log("🚫 Sessão inválida, apague a pasta auth")
             }
         }
 
@@ -52,10 +41,18 @@ async function startBot() {
 
         const command = text.slice(1).split(" ")[0]
 
-        const cmd = comandos.find(c => c.name === command)
+        // 🔥 COMANDOS
 
-        if (cmd) {
-            cmd.execute(sock, msg)
+        // .oi
+        if (command === "oi") {
+            await sock.sendMessage(msg.key.remoteJid, { text: "Oi 👋" })
+        }
+
+        // .fig
+        if (command === "fig") {
+            await sock.sendMessage(msg.key.remoteJid, {
+                sticker: { url: "https://i.imgur.com/JP3QG8G.png" }
+            })
         }
     })
 }
