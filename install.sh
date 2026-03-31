@@ -9,8 +9,12 @@ if [ -d "$BOT_DIR" ]; then
 
     cd $BOT_DIR
 
-    echo "🔄 Atualizando bot..."
-    git pull
+    if [ -d ".git" ]; then
+        echo "🔄 Atualizando bot..."
+        git pull
+    else
+        echo "⚠️ Sem git, pulando atualização"
+    fi
 
     echo "🚀 Iniciando bot..."
     node bot.js
@@ -20,12 +24,9 @@ else
     pkg update -y && pkg upgrade -y
     pkg install nodejs git -y
 
-    echo "📥 Baixando do GitHub..."
-    git clone https://github.com/SEU-USUARIO/bot-whatsapp.git $BOT_DIR
+    git clone https://github.com/mascaradobonitao-coder/bot-whatsapp.git $BOT_DIR
 
     cd $BOT_DIR
-
-    echo "📦 Instalando dependências..."
     npm install
 
     echo "🚀 Iniciando bot..."
